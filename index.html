@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شبكة نغم الإخبارية NNN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        news: {
+                            red: '#cc0000',
+                            dark: '#1a1a1a',
+                            gray: '#f4f4f4',
+                            border: '#e5e5e5'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        serif: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        /* شريط الأخبار الاحترافي */
+        .breaking-news-container {
+            display: flex;
+            background-color: #1a1a1a;
+            color: white;
+            border-bottom: 3px solid #cc0000;
+        }
+        .breaking-label {
+            background-color: #cc0000;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .breaking-label::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 10px solid #cc0000;
+        }
+        .ticker-wrap {
+            flex-grow: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            animation: ticker 30s linear infinite;
+        }
+        .ticker-item {
+            display: inline-block;
+            padding: 0 2rem;
+            font-size: 1rem;
+            position: relative;
+        }
+        .ticker-item::after {
+            content: '•';
+            color: #cc0000;
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* تأثيرات الصور الصحفية */
+        .news-img-container {
+            overflow: hidden;
+        }
+        .news-img {
+            transition: transform 0.4s ease;
+        }
+        .article-card:hover .news-img {
+            transform: scale(1.03);
+        }
+
+        /* علامة البث المباشر */
+        .live-indicator {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800">
+
+    <!-- الشريط العلوي الرفيع -->
+    <div class="bg-news-dark text-gray-400 text-xs py-1 px-4 hidden md:flex justify-between items-center border-b border-gray-800">
+        <div class="flex items-center gap-4">
+            <span id="header-date"></span>
+            <span>|</span>
+            <span>عمان، الأردن <i class="fas fa-sun text-yellow-500 mx-1"></i> 24°C (حالة الشوق: مرتفعة)</span>
+        </div>
+        <div class="flex gap-3">
+            <a href="#" class="hover:text-white transition">English</a>
+            <a href="#" class="hover:text-white transition">البث المباشر <i class="fas fa-circle text-news-red live-indicator text-[8px] align-middle"></i></a>
+        </div>
+    </div>
+
+    <!-- الهيدر الرئيسي -->
+    <header class="bg-white py-4 md:py-6 shadow-sm">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <!-- الشعار -->
+            <div class="flex items-center gap-3">
+                <div class="bg-news-red text-white p-2 rounded-sm text-3xl font-black">
+                    NNN
+                </div>
+                <div>
+                    <h1 class="text-3xl font-black text-news-dark tracking-tighter">شبكة نغم الإخبارية</h1>
+                    <p class="text-sm text-gray-500 font-serif">المصدر الأول والموثوق لأخبار قلب قيس</p>
+                </div>
+            </div>
+            
+            <!-- مساحة إعلانية / راعي -->
+            <div class="hidden lg:block text-left">
+                <span class="text-[10px] text-gray-400 block mb-1">برعاية</span>
+                <div class="border border-gray-200 px-4 py-2 bg-gray-50 flex items-center gap-2">
+                    <i class="fas fa-ring text-gray-400"></i>
+                    <span class="text-sm font-bold text-gray-600">مجوهرات المشاعر الحقيقية</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- شريط التنقل (المنيو) -->
+    <nav class="bg-news-dark text-white sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex flex-wrap text-sm md:text-base font-bold">
+                <li><a href="#" class="block py-3 px-4 md:px-6 bg-news-red"><i class="fas fa-home md:hidden"></i><span class="hidden md:inline">الرئيسية</span></a></li>
+                <li><a href="#" class="block py-3 px-4 md:px-6 hover:text-news-red border-b-2 border-transparent hover:border-news-red transition">آخر الأخبار</a></li>
+                <li><a href="#" class="block py-3 px-4 md:px-6 hover:text-news-red border-b-2 border-transparent hover:border-news-red transition">تقارير خاصة</a></li>
+                <li><a href="#" class="block py-3 px-4 md:px-6 hover:text-news-red border-b-2 border-transparent hover:border-news-red transition">مقالات الرأي</a></li>
+                <li><a href="#" class="block py-3 px-4 md:px-6 hover:text-news-red border-b-2 border-transparent hover:border-news-red transition">معرض الصور</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- شريط الأخبار العاجلة -->
+    <div class="breaking-news-container border-b-4 border-news-dark shadow-md">
+        <div class="breaking-label">
+            <i class="fas fa-bolt live-indicator"></i> عاجل
+        </div>
+        <div class="ticker-wrap bg-white text-news-dark font-bold">
+            <div class="ticker">
+                <span class="ticker-item">الديوان الرئاسي للقلب يعلن حالة الطوارئ القصوى إثر تلقي رسالة صباحية من نغم</span>
+                <span class="ticker-item">مؤشرات السعادة تسجل ارتفاعاً تاريخياً بمقدار 500 نقطة بعد رؤية ابتسامتها</span>
+                <span class="ticker-item">تصريح عاجل: قيس يؤكد أن الخطة الخمسية القادمة تتمحور بالكامل حول إسعاد نغم</span>
+                <span class="ticker-item">خبراء الفلك: جاذبية نغم تتفوق علمياً على جاذبية القمر هذا المساء</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+            
+            <!-- القسم الرئيسي (الأخبار) -->
+            <div class="xl:col-span-3">
+                
+                <!-- الخبر الرئيسي (Hero) -->
+                <article class="bg-white border border-news-border mb-6 article-card relative cursor-pointer" onclick="openArticle()">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <!-- صورة الخبر -->
+                        <div class="news-img-container h-64 md:h-[400px] relative">
+                            <img src="https://images.unsplash.com/photo-1518599904199-0ca897819ddb?auto=format&fit=crop&q=80&w=1200" alt="صورة الخبر الرئيسي" class="w-full h-full object-cover news-img">
+                            <div class="absolute top-4 right-4 bg-news-red text-white text-xs font-bold px-2 py-1">
+                                تغطية خاصة
+                            </div>
+                        </div>
+                        <!-- تفاصيل الخبر -->
+                        <div class="p-6 md:p-8 flex flex-col justify-center">
+                            <span class="text-news-red font-bold text-sm mb-2 block">الشؤون العاطفية</span>
+                            <h2 class="text-3xl md:text-4xl font-black text-news-dark leading-tight mb-4 hover:text-news-red transition">
+                                مرسوم حصري: نغم تتربع على العرش بلا منازع، وقيس يعلن ولائه الأبدي
+                            </h2>
+                            <p class="text-gray-600 font-serif text-lg mb-6 leading-relaxed hidden md:block">
+                                في تطورات متسارعة شهدتها الساحة العاطفية، أكدت مصادر موثوقة أن نغم قد استحوذت بشكل كامل على تفكير قيس، مما أدى إلى إعلانه الاستسلام الطوعي والكامل لجمالها ورقّتها.
+                            </p>
+                            <div class="mt-auto border-t border-gray-100 pt-4 flex items-center justify-between text-sm text-gray-500">
+                                <div>
+                                    <i class="fas fa-pen-nib ml-1"></i> بقلم: قيس جازي (الموفد الخاص)
+                                </div>
+                                <div>
+                                    <i class="far fa-clock ml-1"></i> تم التحديث قبل 5 دقائق
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- شبكة الأخبار الثانوية -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    
+                    <!-- مقال 1 -->
+                    <article class="bg-white border border-news-border article-card">
+                        <div class="news-img-container h-48">
+                            <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&q=80&w=800" alt="صورة مقال" class="w-full h-full object-cover news-img">
+                        </div>
+                        <div class="p-4">
+                            <span class="text-xs text-gray-500 font-bold mb-1 block">علوم ودراسات</span>
+                            <h3 class="text-lg font-bold text-news-dark leading-snug mb-2 hover:text-news-red transition cursor-pointer">
+                                دراسة حديثة: النظر في عيني نغم يعادل قضاء عطلة لمدة شهر في جزر المالديف
+                            </h3>
+                            <p class="text-sm text-gray-600 font-serif line-clamp-2">باحثون يؤكدون أن التأثير النفسي والإيجابي لملامحها يعتبر طفرة علمية فريدة من نوعها.</p>
+                        </div>
+                    </article>
+
+                    <!-- مقال 2 -->
+                    <article class="bg-white border border-news-border article-card">
+                        <div class="news-img-container h-48">
+                            <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&q=80&w=800" alt="صورة مقال" class="w-full h-full object-cover news-img">
+                        </div>
+                        <div class="p-4">
+                            <span class="text-xs text-gray-500 font-bold mb-1 block">اقتصاد المزاج</span>
+                            <h3 class="text-lg font-bold text-news-dark leading-snug mb-2 hover:text-news-red transition cursor-pointer">
+                                ارتفاع قياسي في أسهم "الابتسامة" بفضل إشراقة نغم الصباحية
+                            </h3>
+                            <p class="text-sm text-gray-600 font-serif line-clamp-2">البورصة تسجل أرقاماً خضراء غير مسبوقة بعد انتشار خبر ابتسامتها في الساعات الأولى من الصباح.</p>
+                        </div>
+                    </article>
+
+                    <!-- مقال 3 (مقال رأي) -->
+                    <article class="bg-news-gray border border-news-border article-card flex flex-col justify-between p-5">
+                        <div>
+                            <span class="text-news-red text-sm font-bold mb-3 block"><i class="fas fa-quote-right ml-1"></i> مقال رأي</span>
+                            <h3 class="text-xl font-bold text-news-dark leading-snug mb-3 cursor-pointer hover:text-news-red">
+                                لماذا نغم؟ لأنها الاستثناء الوحيد في عالم من القواعد
+                            </h3>
+                            <p class="text-gray-700 font-serif italic mb-4">
+                                "لم أكن أؤمن بالصدف حتى رأيتها، فأدركت أن بعض الصدف تُكتب بخط اليد من القدر لتغيير مسار حياتنا بالكامل..."
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 mt-4 pt-4 border-t border-gray-300">
+                            <div class="w-10 h-10 bg-news-dark text-white rounded-full flex items-center justify-center font-bold">
+                                ق.ج
+                            </div>
+                            <div class="text-sm">
+                                <span class="font-bold block">قيس جازي</span>
+                                <span class="text-gray-500 text-xs">رئيس التحرير</span>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+
+            <!-- الشريط الجانبي (Sidebar) -->
+            <aside class="xl:col-span-1 space-y-6">
+                
+                <!-- الأكثر قراءة -->
+                <div class="bg-white border border-news-border">
+                    <div class="bg-news-dark text-white p-3 font-bold flex items-center gap-2">
+                        <i class="fas fa-chart-line text-news-red"></i> الأكثر قراءة
+                    </div>
+                    <ul class="divide-y divide-gray-100">
+                        <li class="p-4 hover:bg-gray-50 transition cursor-pointer flex gap-3">
+                            <span class="text-3xl font-black text-gray-200">1</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-news-dark leading-tight hover:text-news-red">تسريب صوتي: قيس يعترف بأن نغم هي نقطة ضعفه الوحيدة</h4>
+                                <span class="text-[10px] text-gray-400 mt-1 block">قبل 2 ساعة</span>
+                            </div>
+                        </li>
+                        <li class="p-4 hover:bg-gray-50 transition cursor-pointer flex gap-3">
+                            <span class="text-3xl font-black text-gray-200">2</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-news-dark leading-tight hover:text-news-red">السر وراء جاذبيتها: خبراء يحللون تفاصيل وجه نغم</h4>
+                                <span class="text-[10px] text-gray-400 mt-1 block">قبل 5 ساعات</span>
+                            </div>
+                        </li>
+                        <li class="p-4 hover:bg-gray-50 transition cursor-pointer flex gap-3">
+                            <span class="text-3xl font-black text-gray-200">3</span>
+                            <div>
+                                <h4 class="font-bold text-sm text-news-dark leading-tight hover:text-news-red">10 أسباب تجعل من نغم الخيار الأول والأخير دائماً</h4>
+                                <span class="text-[10px] text-gray-400 mt-1 block">قبل 8 ساعات</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- النشرة البريدية -->
+                <div class="bg-news-red text-white p-5">
+                    <h3 class="font-bold text-lg mb-2"><i class="fas fa-envelope-open-text ml-2"></i> اشترك في النشرة الخاصة</h3>
+                    <p class="text-sm mb-4 font-serif text-red-100">احصل على رسائل حصرية وتقارير يومية عن مدى حبي لكِ مباشرة في صندوق الوارد.</p>
+                    <button onclick="alert('تم تسجيل قلبك بنجاح في قاعدة بياناتي! ❤️')" class="w-full bg-white text-news-red font-bold py-2 px-4 hover:bg-gray-100 transition shadow-sm">
+                        تأكيد الاشتراك
+                    </button>
+                </div>
+
+                <!-- فيديو مقترح -->
+                <div class="bg-white border border-news-border p-3">
+                    <span class="text-xs font-bold text-news-red block mb-2">شاهد أيضاً</span>
+                    <div class="relative cursor-pointer group">
+                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&q=80&w=400" alt="فيديو" class="w-full h-32 object-cover">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition">
+                            <i class="fas fa-play-circle text-4xl text-white/80 group-hover:text-white group-hover:scale-110 transition"></i>
+                        </div>
+                    </div>
+                    <h4 class="font-bold text-sm mt-2">موجز الأخبار: ملخص لليوم الذي التقيت بك فيه</h4>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- الفوتر (التذييل) -->
+    <footer class="bg-news-dark text-white mt-8 border-t-[6px] border-news-red">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 border-b border-gray-800 pb-8">
+                <div>
+                    <h2 class="text-2xl font-black mb-4"><span class="bg-news-red px-2 py-1 mr-1">N</span>NN</h2>
+                    <p class="text-sm text-gray-400 font-serif leading-relaxed">
+                        شبكة نغم الإخبارية هي منصة مستقلة، غير تابعة لأي جهة سوى قلب قيس. نلتزم بنقل الحقيقة كاملة: أنتِ الأجمل، الأروع، والمتربعة على عرش القلب للأبد.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4 border-r-2 border-news-red pr-2">أقسام الموقع</h3>
+                    <ul class="text-sm text-gray-400 space-y-2">
+                        <li><a href="#" class="hover:text-white transition">الأخبار العاجلة</a></li>
+                        <li><a href="#" class="hover:text-white transition">شؤون عاطفية</a></li>
+                        <li><a href="#" class="hover:text-white transition">تقارير الذكريات</a></li>
+                        <li><a href="#" class="hover:text-white transition">مقالات الرأي</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4 border-r-2 border-news-red pr-2">تابعنا</h3>
+                    <div class="flex gap-4 text-xl">
+                        <a href="#" class="w-10 h-10 bg-gray-800 flex items-center justify-center hover:bg-blue-600 transition rounded"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 flex items-center justify-center hover:bg-blue-400 transition rounded"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 flex items-center justify-center hover:bg-pink-600 transition rounded"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+                <p>جميع الحقوق محفوظة &copy; 2026 شبكة نغم الإخبارية.</p>
+                <div class="mt-4 md:mt-0 bg-gray-800 px-4 py-2 border border-gray-700 text-gray-300">
+                    <i class="fas fa-pen-nib ml-1 text-news-red"></i> من اعداد قيس جازي
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- نافذة قراءة المقال (Modal) تبدو كصفحة مقال حقيقية -->
+    <div id="article-modal" class="fixed inset-0 z-[100] hidden bg-gray-900/90 overflow-y-auto">
+        <div class="min-h-screen px-4 text-center">
+            <div class="inline-block w-full max-w-3xl my-8 text-right align-middle bg-white shadow-xl">
+                <!-- شريط علوي للنافذة -->
+                <div class="flex justify-between items-center bg-news-dark text-white p-3">
+                    <span class="font-bold text-sm">قراءة المقال</span>
+                    <button onclick="closeArticle()" class="hover:text-news-red transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <!-- محتوى المقال -->
+                <div class="p-6 md:p-10">
+                    <span class="bg-news-red text-white text-xs px-2 py-1 font-bold mb-4 inline-block">تغطية خاصة</span>
+                    <h1 class="text-3xl md:text-4xl font-black text-news-dark mb-4 leading-tight">مرسوم حصري: نغم تتربع على العرش بلا منازع، وقيس يعلن ولائه الأبدي</h1>
+                    
+                    <div class="flex items-center gap-4 border-y border-gray-200 py-3 mb-6 text-sm text-gray-600">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-news-dark text-white rounded-full flex items-center justify-center font-bold text-xs">ق.ج</div>
+                            <span class="font-bold">قيس جازي</span>
+                        </div>
+                        <span class="text-gray-300">|</span>
+                        <span><i class="far fa-calendar-alt ml-1"></i> نُشر اليوم</span>
+                    </div>
+
+                    <img src="https://images.unsplash.com/photo-1518599904199-0ca897819ddb?auto=format&fit=crop&q=80&w=1200" alt="صورة المقال" class="w-full h-auto mb-6">
+                    
+                    <div class="font-serif text-lg text-gray-800 leading-loose space-y-4">
+                        <p><strong>عمان - وكالات:</strong> في تصريح صحفي غير مسبوق، أعلن قيس صباح اليوم أن نغم لم تعد مجرد جزء من حياته اليومية، بل تحولت رسمياً لتصبح "الحياة بأكملها".</p>
+                        <p>وأفادت الأنباء الواردة من "الديوان الرئاسي للقلب" أن عيناها تحملان أسراراً كونية لم يتمكن العلماء من فك شفرتها حتى الآن، بينما تعمل ابتسامتها كمضاد حيوي فوري يمحو كل علامات الحزن والإرهاق.</p>
+                        <blockquote class="border-r-4 border-news-red pr-4 my-6 text-2xl font-bold text-news-dark bg-gray-50 p-4">
+                            "هذا الخبر ليس للقراءة فقط، بل هو نبض حقيقي يكتبه قيس كل يوم في قلبه."
+                        </blockquote>
+                        <p>وختم المراقبون تقريرهم بتأكيد أن هذه الحالة مستعصية على العلاج، وأن الاستسلام التام لجاذبية نغم هو القرار الاستراتيجي الأصح والوحيد المتاح في المرحلة الراهنة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // إعداد التاريخ في الهيدر
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('header-date').innerText = new Date().toLocaleDateString('ar-EG', options);
+
+        // التحكم في فتح وإغلاق المقال
+        const modal = document.getElementById('article-modal');
+        
+        function openArticle() {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // منع التمرير في الخلفية
+        }
+
+        function closeArticle() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // إعادة التمرير
+        }
+    </script>
+</body>
+</html>
+
+
